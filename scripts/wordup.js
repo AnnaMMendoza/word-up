@@ -130,6 +130,11 @@ function render() {
     $("#word-submissions").empty();
     // TODO 10
     // Add a few things to the above code block (underneath "// clear stuff").
+    $("#textbox").removeClass("bad-attempt"); 
+    // $(".disallowed-letter").remove();
+    $("span").remove(); // like i said I don't know why i did this, but... worth a shot? okey --- works for the tiles! 
+
+    $("#textbox").removeAttr("disabled"); // nope still not doing it
 
 
     // reveal the #game container
@@ -160,7 +165,7 @@ function render() {
 
         // TODO 8
         // append the red letter chips to the form
-
+        $("form").append(redLetterChips);
     }
 
     // if the game is over
@@ -168,7 +173,8 @@ function render() {
     if (gameOver) {
         // TODO 9
         // disable the text box and clear its contents
-
+        $("#textbox").attr("disabled", true);
+        $("#textbox").val("");
     }
 }
 
@@ -282,8 +288,13 @@ function isDisallowedLetter(letter) {
     // TODO 7
     // This should return true if the letter is not an element of
     // the .allowedLetters list in the model
-    return false;
-}
+    if (model.allowedLetters.indexOf(letter) === -1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+    }
 
 /**
  * Given a word, returns a list of all the disallowed letters in that word
