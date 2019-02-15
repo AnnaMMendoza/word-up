@@ -1,3 +1,4 @@
+// hey gurl hey
 
 
 // ----------------- MODEL -----------------
@@ -33,6 +34,7 @@ function startGame() {
     model.wordSubmissions = [];
     model.currentAttempt = "";
     model.timer = startTimer();
+    existingWords = [];
 }
 
 /*
@@ -55,11 +57,19 @@ function addNewWordSubmission(word) {
     // replace the hardcoded 'false' with the real answer
     var alreadyUsed = false;
 
+    if (existingWords.includes(word)) {
+        console.log("we already got one");
+        alreadyUsed = true;
+    }
+ 
+    
+    
     // if the word is valid and hasn't already been used, add it
     if (containsOnlyAllowedLetters(word) && alreadyUsed == false) {
         model.wordSubmissions.push({ word: word });
         // and now we must also determine whether this is actually a real word
         checkIfWordIsReal(word);
+        existingWords.push(word);    
     }
 }
 
@@ -79,7 +89,7 @@ function checkIfWordIsReal(word) {
             console.log("We received a response from Pearson!");
 
             // let's print the response to the console so we can take a looksie
-            console.log(response);
+            // console.log(response);
 
             // TODO 14
             // Replace the 'true' below.
@@ -93,10 +103,14 @@ function checkIfWordIsReal(word) {
                 var theAnswer = false;
             }
             console.log(theAnswer);
-            
+
             // TODO 15
             // Update the corresponding wordSubmission in the model
-
+        model.wordSubmissions.forEach(function(submission) {
+            if (submission.word == word) {
+                submission.isRealWord = theAnswer 
+            }
+        });
 
             // re-render
             render();
@@ -216,15 +230,22 @@ function wordSubmissionChip(wordSubmission) {
         var scoreChip = $("<span></span>").text("⟐");
         // TODO 17
         // give the scoreChip appropriate text content
+        if (wordSubmission.isRealWord)  
+           { $(scoreChip).text(wordScore(wordSubmission.word)).addClass("tag-sm tag-primary");
+        } else { 
+            $(scoreChip).text("X").addClass("tag-sm tag-danger");}
+         
 
         // TODO 18
         // give the scoreChip appropriate css classes
 
         // TODO 16
         // append scoreChip into wordChip
-
+        $(wordChip).append(scoreChip);
+        // ope don't do all that
+        
     }
-
+// stay tuned on twitter chat  ok
     return wordChip;
 }
 
@@ -352,7 +373,7 @@ function wordScore(word) {
     // TODO 19
     // Replace the empty list below.
     // Map the list of letters into a list of scores, one for each letter.
-    var letterScores = [];
+    var letterScores = letters.map(letterScore);
 
     // return the total sum of the letter scores
     return letterScores.reduce(add, 0);
@@ -376,7 +397,8 @@ function currentScore() {
 
     // TODO 20
     // return the total sum of the word scores
-    return 0;
+    return wordScores.reduce(add, 0);
+    
 }
 
 
