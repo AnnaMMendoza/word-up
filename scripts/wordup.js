@@ -237,15 +237,12 @@ function wordSubmissionChip(wordSubmission) {
          
 
         // TODO 18
-        // give the scoreChip appropriate css classes
+        // give the scoreChip appropriate css classes --- check! see above
 
         // TODO 16
         // append scoreChip into wordChip
-        $(wordChip).append(scoreChip);
-        // ope don't do all that
-        
+        $(wordChip).append(scoreChip);   
     }
-// stay tuned on twitter chat  ok
     return wordChip;
 }
 
@@ -397,8 +394,7 @@ function currentScore() {
 
     // TODO 20
     // return the total sum of the word scores
-    return wordScores.reduce(add, 0);
-    
+    return wordScores.reduce(add, 0);   
 }
 
 
