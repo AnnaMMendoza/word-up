@@ -74,7 +74,7 @@ function checkIfWordIsReal(word) {
     // make an AJAX call to the Pearson API
     $.ajax({
         // TODO 13 what should the url be?
-        url: "www.todo13.com",
+        url: "http://api.pearson.com/v2/dictionaries/lasde/entries?headword=" +word,
         success: function(response) {
             console.log("We received a response from Pearson!");
 
@@ -85,8 +85,15 @@ function checkIfWordIsReal(word) {
             // Replace the 'true' below.
             // If the response contains any results, then the word is legitimate.
             // Otherwise, it is not.
-            var theAnswer = true;
-
+            if (response.results.length > 0) {
+                var theAnswer = true;
+            
+            }
+            else {
+                var theAnswer = false;
+            }
+            console.log(theAnswer);
+            
             // TODO 15
             // Update the corresponding wordSubmission in the model
 
@@ -131,11 +138,8 @@ function render() {
     // TODO 10
     // Add a few things to the above code block (underneath "// clear stuff").
     $("#textbox").removeClass("bad-attempt"); 
-    // $(".disallowed-letter").remove();
-    $("span").remove(); // like i said I don't know why i did this, but... worth a shot? okey --- works for the tiles! 
-
-    $("#textbox").removeAttr("disabled"); // nope still not doing it
-
+    $("span").remove();
+    $("#textbox").removeAttr("disabled", false);
 
     // reveal the #game container
     $("#game").show();
@@ -146,7 +150,8 @@ function render() {
 
     // TODO 11
     // Render the word submissions
-
+    var words = model.wordSubmissions.map(wordSubmissionChip);
+    $("#word-submissions").append(words);
 
     // Set the value of the textbox
     $("#textbox").val(model.currentAttempt);
@@ -312,7 +317,11 @@ function disallowedLettersInWord(word) {
 function containsOnlyAllowedLetters(word) {
     // TODO 12
     // Return the actual answer.
-    return true;
+    if (disallowedLettersInWord(word) == false) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
